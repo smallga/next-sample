@@ -1,8 +1,18 @@
+import { Product } from "@/interface/product.interface";
 import axios from "axios";
 
-export async function getProduct() {
+const urlProfix = 'http://localhost:3000/'
+
+export async function getProduct(id: string): Promise<Product>  {
   const { data: response } = await axios(
-    `https://res.cloudinary.com/smallga/raw/upload/v1543484994/jsonData/productList.json`
+    `${urlProfix}/api/product/${id}`
+  );
+  return response;
+}
+
+export async function getProducts(): Promise<Product[]>  {
+  const { data: response } = await axios(
+    `${urlProfix}/api/products`
   );
   return response;
 }
