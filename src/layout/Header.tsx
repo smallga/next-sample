@@ -6,7 +6,6 @@ export default function Header(props: HeaderProps) {
       <Icon src={'/icons/food.svg'} alt={'food-icon'} className="mr-4" />
       <span className="mr-4 hidden md:block">Food Station</span>
       <input className="h-8 flex-1 rounded-md border-[1px] border-slate-300" />
-      <Icon src={'/icons/cart.svg'} alt={'cart-icon'} className="ml-4" />
     </div>
   )
 }

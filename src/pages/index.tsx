@@ -2,10 +2,11 @@ import { Inter } from 'next/font/google'
 import { GetServerSideProps } from 'next'
 import { getProducts } from '@/server/product'
 import { Product } from '@/interface/product.interface'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Header from '@/layout/Header'
 import ProductCard from '@/components/product-card'
+import CartSvgIcon from '@/icons/cart-icon'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,18 +17,47 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   const { products } = props
 
+  const [showClickAnimated, setShowClickAnimated] = useState(false)
+  const [addProductSrc, setAddProductSrc] = useState('')
+  const animatedEleRef = useRef<HTMLImageElement>(null)
+
   const productsQuery = useQuery({
     queryKey: ['products'],
     queryFn: getProducts,
     initialData: products,
   })
 
+  const stopAnimated = useCallback(() => {
+    setTimeout(() => {
+      setShowClickAnimated(false)
+    }, 300)
+  }, [animatedEleRef])
+
+  const handleShowClickAnimated = useCallback(
+    (xPosition: number, yPosition: number, productSrc: string) => {
+      if (animatedEleRef && animatedEleRef.current) {
+        animatedEleRef.current.style.right =
+          window.innerWidth - xPosition + 'px'
+        animatedEleRef.current.style.bottom =
+          window.innerHeight - yPosition + 'px'
+      }
+      setAddProductSrc(productSrc)
+      setShowClickAnimated(true)
+      stopAnimated()
+    },
+    [animatedEleRef]
+  )
+
   const productList = useMemo(() => {
     return (
       products && (
         <>
           {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard
+              key={index}
+              showClickAnimated={handleShowClickAnimated}
+              product={product}
+            />
           ))}
         </>
       )
@@ -37,12 +67,25 @@ export default function Home(props: HomeProps) {
   useEffect(() => {
     console.log(productsQuery)
   }, [])
+
   return (
     <div className="w-full">
       <Header></Header>
       <div className="flex flex-wrap bg-slate-300 px-2 pt-12">
         {productList}
       </div>
+      <div className="fixed right-5 bottom-5 rounded-full bg-black p-3 opacity-80 shadow-lg">
+        <CartSvgIcon className="text-white"></CartSvgIcon>
+      </div>
+      {
+        <img
+          ref={animatedEleRef}
+          src={addProductSrc}
+          className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-black ${
+            showClickAnimated ? 'block animate-gotoShopCartMobile' : 'hidden'
+          }`}
+        ></img>
+      }
     </div>
   )
 }
