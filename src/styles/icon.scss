@@ -1,0 +1,10 @@
+svg {
+  &.active {
+    &[aria-label='heart-like'] {
+      stroke: #f91a1a;
+      path {
+        fill: #f91a1a !important;
+      }
+    }
+  }
+}

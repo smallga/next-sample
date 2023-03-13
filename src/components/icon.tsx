@@ -3,16 +3,19 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 
 const getEnumWidth = (size?: IconSizeEnum) => {
-  let width = 24
+  let width = 32
   switch (size) {
-    case IconSizeEnum.SM:
+    case IconSizeEnum.XS:
       width = 16
       break
-    case IconSizeEnum.MD:
+    case IconSizeEnum.SM:
       width = 24
       break
-    case IconSizeEnum.LG:
+    case IconSizeEnum.MD:
       width = 32
+      break
+    case IconSizeEnum.LG:
+      width = 48
       break
   }
   return width
