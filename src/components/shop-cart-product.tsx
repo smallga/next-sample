@@ -21,7 +21,7 @@ export default function ShopCartProduct(props: ShopCartProductProps) {
   }
   const totalPrice = useMemo(
     () => product.quantity * product.unitPrice,
-    [product.quantity]
+    [product.quantity, product.unitPrice]
   )
 
   useEffect(() => {

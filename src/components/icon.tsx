@@ -45,4 +45,6 @@ const Icon = React.memo((props: IconProps) => {
   )
 })
 
+Icon.displayName = 'Icon'
+
 export default Icon

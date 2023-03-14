@@ -12,6 +12,7 @@ import Link from 'next/link'
 import ShopCart from '@/layout/Shopcart'
 import { useAppDispatch } from '@/hook/redux-hook'
 import { pushProduct } from '@/store/slice/shopcart.slice'
+import Image from 'next/image'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -38,7 +39,7 @@ export default function Home(props: HomeProps) {
     setTimeout(() => {
       setShowClickAnimated(false)
     }, 300)
-  }, [animatedEleRef])
+  }, [])
 
   const handleShowClickAnimated = useCallback(
     (xPosition: number, yPosition: number, productSrc: string) => {
@@ -52,7 +53,7 @@ export default function Home(props: HomeProps) {
       setShowClickAnimated(true)
       stopAnimated()
     },
-    [animatedEleRef]
+    [animatedEleRef, stopAnimated]
   )
 
   const handleAddProduct = useCallback(
@@ -69,7 +70,7 @@ export default function Home(props: HomeProps) {
         })
       )
     },
-    [animatedEleRef]
+    [dispach, handleShowClickAnimated]
   )
 
   const productList = useMemo(() => {
@@ -86,15 +87,11 @@ export default function Home(props: HomeProps) {
         </>
       )
     )
-  }, [products])
+  }, [products, handleAddProduct])
 
   const showShoppingCart = useMemo(() => {
     return router.query.action && router.query.action === 'shopcart'
   }, [router.query])
-
-  useEffect(() => {
-    console.log(productsQuery)
-  }, [])
 
   return (
     <div className="w-full">
@@ -108,13 +105,14 @@ export default function Home(props: HomeProps) {
         </div>
       </Link>
       {
-        <img
+        <Image
           ref={animatedEleRef}
           src={addProductSrc}
           className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-black ${
             showClickAnimated ? 'block animate-gotoShopCartMobile' : 'hidden'
           }`}
-        ></img>
+          alt={'product-img'}
+        ></Image>
       }
       <div
         className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] rounded-lg bg-white shadow-2xl ${
