@@ -1,8 +1,14 @@
+import { IconSizeEnum } from '@/enum/icon-size.enum'
 import { useAppDispatch } from '@/hook/redux-hook'
 import { CartProduct } from '@/interface/cart-product.interface'
-import { addProdcctUnit, minusProdcctUnit } from '@/store/slice/shopcart.slice'
+import {
+  addProdcctUnit,
+  deleteProductById,
+  minusProdcctUnit,
+} from '@/store/slice/shopcart.slice'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef } from 'react'
+import Icon from './icon'
 
 interface ShopCartProductProps {
   product: CartProduct
@@ -18,6 +24,9 @@ export default function ShopCartProduct(props: ShopCartProductProps) {
   }
   const minusUnit = () => {
     dispach(minusProdcctUnit(product.id))
+  }
+  const handleDelete = () => {
+    dispach(deleteProductById(product.id))
   }
   const totalPrice = useMemo(
     () => product.quantity * product.unitPrice,
@@ -56,7 +65,7 @@ export default function ShopCartProduct(props: ShopCartProductProps) {
           <span className="mr-1">${product.unitPrice}</span>/
           <span className="ml-1">{product.unit}</span>
         </p>
-        <div>
+        <div className="flex">
           <button
             onClick={addUnit}
             className="h-6 w-4 min-w-[35px] rounded-l-lg rounded-r-none border-[1px] border-slate-300 bg-white p-0 leading-none text-black"
@@ -74,6 +83,13 @@ export default function ShopCartProduct(props: ShopCartProductProps) {
           >
             -
           </button>
+          <Icon
+            src={'/icons/trash.svg'}
+            alt={'trash'}
+            size={IconSizeEnum.SM}
+            className="ml-auto cursor-pointer hover:opacity-75"
+            onClick={handleDelete}
+          />
         </div>
       </div>
     </div>

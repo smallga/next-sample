@@ -1,6 +1,6 @@
 import { IconSizeEnum } from '@/enum/icon-size.enum'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const getEnumWidth = (size?: IconSizeEnum) => {
   let width = 32
@@ -28,11 +28,16 @@ interface IconProps {
   size?: IconSizeEnum
   width?: number
   height?: number
+  [key: string]: any
 }
 
 const Icon = React.memo((props: IconProps) => {
-  const { src, alt, size, className, width, height } = props
-  const [widthPx, setWidthPx] = useState(getEnumWidth(size))
+  const { src, alt, size, className, width, height, ...remainProps } = props
+  const [widthPx, setWidthPx] = useState(32)
+
+  useEffect(() => {
+    setWidthPx(getEnumWidth(size))
+  }, [size])
 
   return (
     <Image
@@ -41,6 +46,7 @@ const Icon = React.memo((props: IconProps) => {
       className={className}
       width={width ? width : widthPx}
       height={height ? height : widthPx}
+      {...remainProps}
     />
   )
 })

@@ -37,7 +37,7 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   return (
-    <div className="m-2 flex-[calc(50%-1rem)] cursor-pointer rounded-xl bg-white p-4 shadow-sm duration-200 hover:scale-[103%] hover:shadow-xl md:flex-[calc(33%-1rem)] lg:flex-[calc(25%-1rem)]">
+    <div className="m-2 flex-[calc(50%-1rem)] cursor-pointer rounded-xl bg-white p-3 shadow-sm duration-200 hover:scale-[103%]  hover:shadow-xl md:flex-[calc(33%-1rem)] md:p-4 lg:flex-[calc(25%-1rem)]">
       <HeartSvg
         className={`ml-auto cursor-pointer hover:brightness-90 ${
           isLiked ? 'active animate-clickAnimate' : ''
@@ -56,11 +56,6 @@ export default function ProductCard(props: ProductCardProps) {
       <p className="mt-2 text-sm text-des">{product.information}</p>
       <p className="mt-1 text-xs text-des">{product.unit}</p>
       <div className="mt-2 flex items-center">
-        {/* <input
-          type="number"
-          ref={inputRef}
-          className="mx-2 ml-auto w-[60px] border-slate-400"
-        /> */}
         <span className="text-xl">{`$${product.price}`}</span>
         <button className="ml-auto block" onClick={addItemToCart}>
           加入

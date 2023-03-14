@@ -32,11 +32,11 @@ export const shopcartSlice = createSlice({
         state.products[String(action.payload.id)] = action.payload
       }
     },
-    deleteProduct: (
+    deleteProductById: (
       state: ShopcartSlice,
-      action: PayloadAction<CartProduct>
+      action: PayloadAction<number>
     ) => {
-      delete state.products[String(action.payload.id)]
+      delete state.products[String(action.payload)]
     },
     addProdcctUnit: (state: ShopcartSlice, action: PayloadAction<number>) => {
       if (state.products[String(action.payload)]) {
@@ -58,6 +58,7 @@ export const {
   uploadProductUnit,
   addProdcctUnit,
   minusProdcctUnit,
+  deleteProductById,
   pushProduct,
 } = shopcartSlice.actions
 export const getCartProducts = (state: RootState) => state.shopcart.products
