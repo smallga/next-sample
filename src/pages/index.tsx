@@ -7,6 +7,11 @@ import { useQuery } from '@tanstack/react-query'
 import Header from '@/layout/Header'
 import ProductCard from '@/components/product-card'
 import CartSvgIcon from '@/icons/cart-icon'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import ShopCart from '@/layout/Shopcart'
+import { useAppDispatch } from '@/hook/redux-hook'
+import { pushProduct } from '@/store/slice/shopcart.slice'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,6 +21,8 @@ interface HomeProps {
 
 export default function Home(props: HomeProps) {
   const { products } = props
+  const router = useRouter()
+  const dispach = useAppDispatch()
 
   const [showClickAnimated, setShowClickAnimated] = useState(false)
   const [addProductSrc, setAddProductSrc] = useState('')
@@ -48,6 +55,23 @@ export default function Home(props: HomeProps) {
     [animatedEleRef]
   )
 
+  const handleAddProduct = useCallback(
+    (xPosition: number, yPosition: number, product: Product) => {
+      handleShowClickAnimated(xPosition, yPosition, product.imgLink)
+      dispach(
+        pushProduct({
+          id: product.id,
+          name: product.productName,
+          imgLink: product.imgLink,
+          unitPrice: product.price,
+          unit: product.unit,
+          quantity: 1,
+        })
+      )
+    },
+    [animatedEleRef]
+  )
+
   const productList = useMemo(() => {
     return (
       products && (
@@ -55,7 +79,7 @@ export default function Home(props: HomeProps) {
           {products.map((product, index) => (
             <ProductCard
               key={index}
-              showClickAnimated={handleShowClickAnimated}
+              addProduct={handleAddProduct}
               product={product}
             />
           ))}
@@ -63,6 +87,10 @@ export default function Home(props: HomeProps) {
       )
     )
   }, [products])
+
+  const showShoppingCart = useMemo(() => {
+    return router.query.action && router.query.action === 'shopcart'
+  }, [router.query])
 
   useEffect(() => {
     console.log(productsQuery)
@@ -74,9 +102,11 @@ export default function Home(props: HomeProps) {
       <div className="flex flex-wrap bg-slate-300 px-2 pt-12">
         {productList}
       </div>
-      <div className="fixed right-5 bottom-5 rounded-full bg-black p-3 opacity-80 shadow-lg">
-        <CartSvgIcon className="text-white"></CartSvgIcon>
-      </div>
+      <Link href={`/?action=shopcart`} shallow>
+        <div className="fixed right-5 bottom-5 cursor-pointer rounded-full bg-black p-3 shadow-lg duration-200 hover:shadow-active">
+          <CartSvgIcon className="text-white"></CartSvgIcon>
+        </div>
+      </Link>
       {
         <img
           ref={animatedEleRef}
@@ -86,6 +116,15 @@ export default function Home(props: HomeProps) {
           }`}
         ></img>
       }
+      <div
+        className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] rounded-lg bg-white shadow-2xl ${
+          showShoppingCart
+            ? 'h-full w-full animate-scaleIn'
+            : 'h-0 w-0 animate-scaleOut'
+        }`}
+      >
+        <ShopCart />
+      </div>
     </div>
   )
 }

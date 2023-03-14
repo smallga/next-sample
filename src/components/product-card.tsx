@@ -5,7 +5,7 @@ import HeartSvg from '@/icons/heart-icon'
 
 interface ProductCardProps {
   product: Product
-  showClickAnimated?: (x: number, y: number, src: string) => void
+  addProduct?: (x: number, y: number, product: Product) => void
 }
 export default function ProductCard(props: ProductCardProps) {
   const { product } = props
@@ -29,11 +29,11 @@ export default function ProductCard(props: ProductCardProps) {
 
   const addItemToCart = (e: any) => {
     console.log(e)
-    const { showClickAnimated } = props
+    const { addProduct } = props
     let xPosition = e.clientX
     let yPosition = e.clientY
-    if (showClickAnimated) {
-      showClickAnimated(xPosition, yPosition, product.imgLink)
+    if (addProduct) {
+      addProduct(xPosition, yPosition, product)
     }
   }
 
@@ -53,18 +53,16 @@ export default function ProductCard(props: ProductCardProps) {
         height={'200'}
         className=" max-h-[200px] w-full object-contain duration-200"
       />
-      <h2>
-        {product.productName}
-        <span className="ml-2 text-xl">{`- $${product.price}`}</span>
-      </h2>
-      <p className="mt-2 text-des">{product.information}</p>
-      <p className="mt-1 text-sm text-des">{product.unit}</p>
-      <div className="flex items-center">
+      <h2>{product.productName}</h2>
+      <p className="mt-2 text-sm text-des">{product.information}</p>
+      <p className="mt-1 text-xs text-des">{product.unit}</p>
+      <div className="mt-2 flex items-center">
         {/* <input
           type="number"
           ref={inputRef}
           className="mx-2 ml-auto w-[60px] border-slate-400"
         /> */}
+        <span className="text-xl">{`$${product.price}`}</span>
         <button className="ml-auto block" onClick={addItemToCart}>
           加入購物車
         </button>
