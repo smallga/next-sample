@@ -91,7 +91,17 @@ export default function Home(props: HomeProps) {
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap bg-slate-300 px-2">{productList}</div>
+      <div className="flex flex-wrap bg-slate-300 px-2">
+        {isLoading && (
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
+        {productList}
+      </div>
       <Link href={`/?action=shopcart`} shallow>
         <div className="fixed right-5 bottom-5 cursor-pointer rounded-full bg-black p-3 shadow-lg duration-200 hover:shadow-active">
           <div className="relative">
@@ -111,12 +121,11 @@ export default function Home(props: HomeProps) {
           src={addProductSrc}
           width="32"
           height="32"
-          className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-white ${
+          className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-slate-500 ${
             showClickAnimated ? 'block animate-gotoShopCartMobile' : 'hidden'
           }`}
           alt={'product-img'}
           priority={true}
-          blurDataURL="/icons/meat.svg"
         ></Image>
       }
       <div
@@ -135,7 +144,7 @@ export default function Home(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async () => {
   // const products = useQuery(['products'], getProducts);
   const queryClient = new QueryClient()
-  await queryClient.prefetchQuery(['products'], getProducts)
+  await queryClient.fetchQuery(['products'], getProducts)
   // const products = (await getProducts()) as Product[]
 
   return {
