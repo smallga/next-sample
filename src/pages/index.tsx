@@ -108,6 +108,8 @@ export default function Home(props: HomeProps) {
         <Image
           ref={animatedEleRef}
           src={addProductSrc}
+          width="32"
+          height="32"
           className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-black ${
             showClickAnimated ? 'block animate-gotoShopCartMobile' : 'hidden'
           }`}

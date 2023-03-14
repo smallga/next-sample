@@ -11,6 +11,9 @@ const nextConfig = {
         pathname: '/smallga/image/upload/v1543223643/image/**.jpg',
       },
     ],
+    // sassOptions: {
+    //   includePaths: [path.join(__dirname, 'styles')],
+    // },
   },
 }
 
