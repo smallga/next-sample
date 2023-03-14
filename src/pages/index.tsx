@@ -28,6 +28,7 @@ export default function Home(props: HomeProps) {
 
   const [showClickAnimated, setShowClickAnimated] = useState(false)
   const [addProductSrc, setAddProductSrc] = useState('')
+  const [clickedCart, setClickedCart] = useState(false)
   const animatedEleRef = useRef<HTMLImageElement>(null)
 
   const stopAnimated = useCallback(() => {
@@ -86,7 +87,9 @@ export default function Home(props: HomeProps) {
   }, [data, handleAddProduct])
 
   const showShoppingCart = useMemo(() => {
-    return router.query.action && router.query.action === 'shopcart'
+    let inShopCart = router.query.action && router.query.action === 'shopcart'
+    if (inShopCart) setClickedCart(true)
+    return inShopCart
   }, [router.query])
 
   return (
@@ -129,10 +132,10 @@ export default function Home(props: HomeProps) {
         ></Image>
       }
       <div
-        className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] rounded-lg bg-white shadow-2xl lg:max-h-[700px] lg:max-w-[500px] ${
+        className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] overflow-hidden rounded-lg bg-white shadow-2xl lg:max-h-[700px] lg:max-w-[500px] ${
           showShoppingCart
             ? 'h-full w-full animate-scaleIn'
-            : 'h-0 w-0 animate-scaleOut'
+            : `h-0 w-0 ${clickedCart && 'animate-scaleOut'}`
         }`}
       >
         <ShopCart />
