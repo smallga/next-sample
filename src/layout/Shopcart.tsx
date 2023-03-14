@@ -1,7 +1,9 @@
 import ShopCartProduct from '@/components/shop-cart-product'
 import { useAppSelector } from '@/hook/redux-hook'
+import { useTotalPrice } from '@/hook/useTotalPrice'
 import { CartProduct } from '@/interface/cart-product.interface'
 import { getCartProducts } from '@/store/slice/shopcart.slice'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -15,14 +17,7 @@ export default function ShopCart(props: ShopCartProps) {
     ))
   }, [cartProducts])
 
-  const totalPrice = useMemo(() => {
-    const initialValue = 0
-    return Object.entries<CartProduct>(cartProducts).reduce(
-      (accumulator, [key, product]) =>
-        accumulator + product.quantity * product.unitPrice,
-      initialValue
-    )
-  }, [cartProducts])
+  const totalPrice = useTotalPrice()
 
   const handleCartClose = () => {
     if (router) {
@@ -57,7 +52,9 @@ export default function ShopCart(props: ShopCartProps) {
         className="h-20 w-full rounded-b-md border-t-[1px] border-slate-300 bg-white px-4 py-2"
       >
         <div>Total: ${totalPrice}</div>
-        <button className="mt-2 w-full bg-slate-700">我要結帳</button>
+        <Link href={`/checkout`}>
+          <button className="mt-2 w-full bg-slate-700">我要結帳</button>
+        </Link>
       </div>
     </div>
   )

@@ -91,10 +91,7 @@ export default function Home(props: HomeProps) {
 
   return (
     <div className="w-full">
-      <Header></Header>
-      <div className="flex flex-wrap bg-slate-300 px-2 pt-12">
-        {productList}
-      </div>
+      <div className="flex flex-wrap bg-slate-300 px-2">{productList}</div>
       <Link href={`/?action=shopcart`} shallow>
         <div className="fixed right-5 bottom-5 cursor-pointer rounded-full bg-black p-3 shadow-lg duration-200 hover:shadow-active">
           <div className="relative">
