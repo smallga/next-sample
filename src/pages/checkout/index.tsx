@@ -15,7 +15,7 @@ export default function Chekcout(props: ChekcoutProps) {
   }, [totalPrice, Vat])
 
   return (
-    <div className="m-auto flex h-[calc(100vh-6rem)] w-full max-w-[500px] flex-col justify-center px-4">
+    <div className="m-auto flex h-[calc(100vh-6rem)] w-full max-w-[600px] flex-col justify-center px-4">
       <div className="flex">
         {`未稅:`}
         <div className="ml-auto">${totalPrice}</div>
