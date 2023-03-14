@@ -30,10 +30,7 @@ export default function ShopCart(props: ShopCartProps) {
   }
 
   return (
-    <div
-      aria-label="shopping-cart"
-      className="z-40 flex h-full w-full flex-col"
-    >
+    <div aria-label="shopping-cart" className="flex h-full w-full flex-col">
       <div
         className="rounded-t-md border-b-[1px] border-slate-300 bg-white px-4 pt-4"
         onScroll={handleScroll}
