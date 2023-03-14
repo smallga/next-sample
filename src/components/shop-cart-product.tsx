@@ -31,10 +31,10 @@ export default function ShopCartProduct(props: ShopCartProductProps) {
   }, [inputRef, product.quantity])
 
   return (
-    <div className="flex border-b-[1px] border-slate-300 py-2">
+    <div className="flex border-b-[1px] border-slate-300 py-2 last:border-b-0">
       <div
         aria-label="product-image"
-        className="mr-2 flex h-[80px] items-center"
+        className="mr-4 flex h-[80px] items-center"
       >
         <Image
           src={product.imgLink}

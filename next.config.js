@@ -8,7 +8,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/smallga/image/upload/v1543223643/image/**.jpg',
+        pathname: '/smallga/image/upload/**/**/**.jpg',
       },
     ],
     // sassOptions: {

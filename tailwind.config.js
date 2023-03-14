@@ -15,7 +15,8 @@ module.exports = {
       clickAnimate: 'clickAnimate 0.2s ease-in-out',
       gotoShopCartMobile: 'gotoShopCartMobile 0.3s ease-in-out',
       scaleIn: 'scaleIn 0.3s ease-in-out',
-      scaleOut: 'scaleOut 0.3s ease-in-out',
+      scaleOut: 'scaleOut 0.1s ease-in-out',
+      ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
     },
     keyframes: {
       clickAnimate: {
@@ -43,6 +44,16 @@ module.exports = {
       scaleOut: {
         '0%': { width: '100%', height: '100%' },
         '100%': { width: '0px', height: '0px' },
+      },
+      ping: {
+        '75%': {
+          transform: 'scale(2)',
+          opacity: '0',
+        },
+        '100%': {
+          transform: 'scale(2)',
+          opacity: '0',
+        },
       },
     },
   },

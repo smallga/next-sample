@@ -28,7 +28,6 @@ export default function ProductCard(props: ProductCardProps) {
   }, [isLiked])
 
   const addItemToCart = (e: any) => {
-    console.log(e)
     const { addProduct } = props
     let xPosition = e.clientX
     let yPosition = e.clientY
@@ -38,7 +37,7 @@ export default function ProductCard(props: ProductCardProps) {
   }
 
   return (
-    <div className="m-2 flex-[calc(50%-1rem)] rounded-xl bg-white p-4 shadow-sm duration-200 hover:shadow-xl md:flex-[calc(33%-1rem)] lg:flex-[calc(25%-1rem)]">
+    <div className="m-2 flex-[calc(50%-1rem)] cursor-pointer rounded-xl bg-white p-4 shadow-sm duration-200 hover:scale-[103%] hover:shadow-xl md:flex-[calc(33%-1rem)] lg:flex-[calc(25%-1rem)]">
       <HeartSvg
         className={`ml-auto cursor-pointer hover:brightness-90 ${
           isLiked ? 'active animate-clickAnimate' : ''
@@ -64,7 +63,7 @@ export default function ProductCard(props: ProductCardProps) {
         /> */}
         <span className="text-xl">{`$${product.price}`}</span>
         <button className="ml-auto block" onClick={addItemToCart}>
-          加入購物車
+          加入
         </button>
       </div>
     </div>

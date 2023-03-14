@@ -10,30 +10,25 @@ import CartSvgIcon from '@/icons/cart-icon'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import ShopCart from '@/layout/Shopcart'
-import { useAppDispatch } from '@/hook/redux-hook'
-import { pushProduct } from '@/store/slice/shopcart.slice'
+import { useAppDispatch, useAppSelector } from '@/hook/redux-hook'
+import { getCartProducts, pushProduct } from '@/store/slice/shopcart.slice'
+import { dehydrate, QueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
+import useProducts from '@/hook/useProducts'
 
 const inter = Inter({ subsets: ['latin'] })
 
-interface HomeProps {
-  products: Product[]
-}
+interface HomeProps {}
 
 export default function Home(props: HomeProps) {
-  const { products } = props
+  const { data, isLoading } = useProducts()
   const router = useRouter()
   const dispach = useAppDispatch()
+  const cartProducts = useAppSelector(getCartProducts)
 
   const [showClickAnimated, setShowClickAnimated] = useState(false)
   const [addProductSrc, setAddProductSrc] = useState('')
   const animatedEleRef = useRef<HTMLImageElement>(null)
-
-  const productsQuery = useQuery({
-    queryKey: ['products'],
-    queryFn: getProducts,
-    initialData: products,
-  })
 
   const stopAnimated = useCallback(() => {
     setTimeout(() => {
@@ -75,9 +70,10 @@ export default function Home(props: HomeProps) {
 
   const productList = useMemo(() => {
     return (
-      products && (
+      data &&
+      data.length > 0 && (
         <>
-          {products.map((product, index) => (
+          {data.map((product, index) => (
             <ProductCard
               key={index}
               addProduct={handleAddProduct}
@@ -87,7 +83,7 @@ export default function Home(props: HomeProps) {
         </>
       )
     )
-  }, [products, handleAddProduct])
+  }, [data, handleAddProduct])
 
   const showShoppingCart = useMemo(() => {
     return router.query.action && router.query.action === 'shopcart'
@@ -101,7 +97,15 @@ export default function Home(props: HomeProps) {
       </div>
       <Link href={`/?action=shopcart`} shallow>
         <div className="fixed right-5 bottom-5 cursor-pointer rounded-full bg-black p-3 shadow-lg duration-200 hover:shadow-active">
-          <CartSvgIcon className="text-white"></CartSvgIcon>
+          <div className="relative">
+            {cartProducts && Object.entries(cartProducts).length > 0 && (
+              <>
+                <span className="absolute top-0 right-0 inline-flex h-3 w-3 animate-ping  rounded-full bg-sky-400 opacity-90"></span>
+                <span className="absolute top-0 right-0 inline-flex h-3 w-3  rounded-full bg-sky-500"></span>
+              </>
+            )}
+            <CartSvgIcon className="text-white"></CartSvgIcon>
+          </div>
         </div>
       </Link>
       {
@@ -110,14 +114,16 @@ export default function Home(props: HomeProps) {
           src={addProductSrc}
           width="32"
           height="32"
-          className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-black ${
+          className={`fixed h-8 w-8 translate-x-1/2 translate-y-1/2 rounded-full bg-white ${
             showClickAnimated ? 'block animate-gotoShopCartMobile' : 'hidden'
           }`}
           alt={'product-img'}
+          priority={true}
+          blurDataURL="/icons/meat.svg"
         ></Image>
       }
       <div
-        className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] rounded-lg bg-white shadow-2xl ${
+        className={`fixed bottom-5 right-5 max-h-[calc(100%-2.5rem)] max-w-[calc(100%-2.5rem)] rounded-lg bg-white shadow-2xl lg:max-h-[700px] lg:max-w-[500px] ${
           showShoppingCart
             ? 'h-full w-full animate-scaleIn'
             : 'h-0 w-0 animate-scaleOut'
@@ -131,11 +137,13 @@ export default function Home(props: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // const products = useQuery(['products'], getProducts);
-  const products = (await getProducts()) as Product[]
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery(['products'], getProducts)
+  // const products = (await getProducts()) as Product[]
 
   return {
     props: {
-      products,
+      products: dehydrate(queryClient).queries[0].state.data,
     },
   }
 }
